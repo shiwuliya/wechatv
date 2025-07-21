@@ -1,0 +1,75 @@
+name: release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: google-github-actions/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: rust
+          package-name: wechatv
+          bump-minor-pre-major: true
+          bump-patch-for-minor-pre-major: true
+          changelog-types: >
+            [
+              {"type":"feat","section":"新功能","hidden":false},
+              {"type":"fix","section":"Bug修复","hidden":false},
+              {"type":"docs","section":"文档","hidden":false},
+              {"type":"style","section":"样式","hidden":true},
+              {"type":"refactor","section":"重构","hidden":false},
+              {"type":"perf","section":"性能优化","hidden":false},
+              {"type":"test","section":"测试","hidden":true},
+              {"type":"build","section":"构建","hidden":true},
+              {"type":"ci","section":"CI","hidden":true},
+              {"type":"chore","section":"杂项","hidden":true}
+            ]
+
+  build-and-upload:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: 安装 Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+          
+      - name: 构建发布版本
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+          
+      - name: 创建发布包
+        run: |
+          mkdir -p release
+          cp target/release/wechatv.exe release/
+          cp README.md release/ || echo "No README.md found"
+          cd release
+          7z a -tzip wechatv-${{ needs.release-please.outputs.tag_name }}-windows-x64.zip *
+          
+      - name: 上传发布包到 Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: release/wechatv-${{ needs.release-please.outputs.tag_name }}-windows-x64.zip
+          tag_name: ${{ needs.release-please.outputs.tag_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
