@@ -46,6 +46,7 @@ jobs:
           cp README.md release/ || echo "No README.md found"
           cd release
           7z a -tzip wechatv-${{ needs.release-please.outputs.tag_name }}-windows-x64.zip *
+        if: ${{ steps.release.outputs.release_created }}
           
       - name: 上传发布包到 Release
         uses: softprops/action-gh-release@v1
