@@ -13,8 +13,8 @@ permissions:
 jobs:
   # 设置 release-please 任务
   release-please:
-    # 设置任务运行环境为 ubuntu-latest
-    runs-on: ubuntu-latest
+    # 设置任务运行环境为 windows-latest
+    runs-on: windows-latest
     steps:
       # 使用 release-please-action 动作来自动创建发布 PR
       - uses: googleapis/release-please-action@v4
@@ -41,18 +41,18 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
       - name: 创建发布包
         run: |
-          mkdir -p release
-          cp target/release/wechatv.exe release/
-          cp README.md release/ || echo "No README.md found"
+          mkdir release
+          copy target\release\wechatv.exe release\
+          if exist README.md copy README.md release\
           cd release
-          7z a -tzip wechatv-${{ needs.release-please.outputs.tag_name }}-windows-x64.zip *
+          7z a -tzip wechatv-${{ steps.release.outputs.tag_name }}-windows-x64.zip *
         if: ${{ steps.release.outputs.release_created }}
           
       - name: 上传发布包到 Release
         uses: softprops/action-gh-release@v1
         with:
-          files: release/wechatv-${{ needs.release-please.outputs.tag_name }}-windows-x64.zip
-          tag_name: ${{ needs.release-please.outputs.tag_name }}
+          files: release/wechatv-${{ steps.release.outputs.tag_name }}-windows-x64.zip
+          tag_name: ${{ steps.release.outputs.tag_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         if: ${{ steps.release.outputs.release_created }}
