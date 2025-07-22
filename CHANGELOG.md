@@ -1,11 +1,19 @@
 # Changelog
 
-## [0.2.2](https://github.com/KarinJS/wechatv/compare/v0.2.1...v0.2.2) (2025-07-21)
+## [0.3.0](https://github.com/shiwuliya/wechatv/compare/v0.2.1...v0.3.0) (2025-07-22)
+
+
+### Features
+
+* 初始化项目 ([e28d5e6](https://github.com/shiwuliya/wechatv/commit/e28d5e6a156e6732a628e2327cd619966b8e5ac5))
 
 
 ### Bug Fixes
 
-* 优化 Windows 平台的发布流程 ([#4](https://github.com/KarinJS/wechatv/issues/4)) ([e121f44](https://github.com/KarinJS/wechatv/commit/e121f44bdeaf94de1943c21003305e869b38dee8))
+* ci ([96b6782](https://github.com/shiwuliya/wechatv/commit/96b678298ebdf338911ba61933d618353c54f0b7))
+* ci ([4777625](https://github.com/shiwuliya/wechatv/commit/4777625865e15c0c0ee63c1a7027b1623f6def66))
+* ci ([4a1b512](https://github.com/shiwuliya/wechatv/commit/4a1b51253d9aff58aaea2bdbe08444ffa3f5703b))
+* 优化 Windows 平台的发布流程 ([#4](https://github.com/shiwuliya/wechatv/issues/4)) ([e121f44](https://github.com/shiwuliya/wechatv/commit/e121f44bdeaf94de1943c21003305e869b38dee8))
 
 ## [0.2.1](https://github.com/KarinJS/wechatv/compare/v0.2.0...v0.2.1) (2025-07-21)
 
